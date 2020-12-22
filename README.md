@@ -1,2 +1,6 @@
 # 2020-12-otus-java-minkin
-Java Developer. Professional
+
+Минкин ЕН
+Курс Java Developer. Professional
+Группа java-2020-12
+
