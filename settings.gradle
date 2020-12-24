@@ -1,0 +1,3 @@
+rootProject.name = 'minkin-hw'
+include 'hw01-gradle'
+
