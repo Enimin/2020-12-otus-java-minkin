@@ -11,9 +11,15 @@ public class HelloOtus{
         final char joinerSymbol = '_';
         final String inputData = "Hello, ,Otus,,!,";
 
-        List<String> words = Splitter.on(splitterSymbol).trimResults().omitEmptyStrings().splitToList(inputData);
-        String joinedWords = Joiner.on(joinerSymbol).join(words);
+        String joinedWords = joinWordsList(inputData, splitterSymbol, joinerSymbol);
 
         System.out.println(joinedWords);
+    }
+
+    public static String joinWordsList(String wordsList, char splitterSymbol, char joinerSymbol){
+        List<String> words = Splitter.on(splitterSymbol).trimResults().omitEmptyStrings().splitToList(wordsList);
+        String joinedWords = Joiner.on(joinerSymbol).join(words);
+
+        return joinedWords;
     }
 }
