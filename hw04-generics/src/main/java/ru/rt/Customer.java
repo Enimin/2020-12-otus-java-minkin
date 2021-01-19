@@ -48,7 +48,6 @@ public class Customer {
         Customer customer = (Customer) o;
 
         if (id != customer.id) return false;
-        if (scores != customer.scores) return false;
         return name != null ? name.equals(customer.name) : customer.name == null;
     }
 
