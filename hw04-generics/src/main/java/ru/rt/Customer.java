@@ -48,13 +48,12 @@ public class Customer {
         Customer customer = (Customer) o;
 
         if (id != customer.id) return false;
-        return name != null ? name.equals(customer.name) : customer.name == null;
+        return true;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
 

@@ -1,17 +1,18 @@
 package ru.rt;
 
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class CustomerReverseOrder {
 
-    private Stack<Customer> customers = new Stack<>();
+    private final Deque<Customer> customers = new ArrayDeque<>();
 
     public void add(Customer customer) {
-        this.customers.push(customer);
+        this.customers.addFirst(customer);
     }
 
     public Customer take() {
-        return this.customers.pop();
+        return this.customers.pollFirst();
     }
 }
