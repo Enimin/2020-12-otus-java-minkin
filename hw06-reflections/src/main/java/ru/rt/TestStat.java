@@ -13,6 +13,7 @@ public class TestStat {
     public void printStats(){
         int total = testsList.size(), passed = 0;
 
+        System.out.println();
         for( Map.Entry<String, Boolean> test : testsList.entrySet()){
             String statTest = test.getKey();
 
@@ -32,6 +33,7 @@ public class TestStat {
             summary +=  ", " + passed + " passed" + ", " + (total-passed) + " failed";
         }
 
+        System.out.println();
         System.out.println(summary);
     }
 }

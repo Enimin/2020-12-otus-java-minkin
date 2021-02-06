@@ -6,19 +6,19 @@ public class ClassTest {
 
     @Before
     void beforeMethod(){
+        System.out.println();
         System.out.println("exec beforeMethod");
     }
 
     @After
     void afterMethod(){
         System.out.println("exec afterMethod");
-        System.out.println();
     }
 
     @Test
     void testMethod1() throws Exception {
         System.out.println("exec testMethod1");
-        throw new java.lang.Error("    TEST EXCEPTION!");
+        throw new java.lang.Error("TEST EXCEPTION!");
     }
 
     @Test

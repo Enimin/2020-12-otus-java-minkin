@@ -4,16 +4,14 @@ import ru.rt.annotations.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-public class TestRunner<T> {
-    private final Class<T> classTest;
-    private boolean isPassed = false;
-    private boolean isBeforePassed = false;
-    private boolean isTestPassed = false;
+public class TestRunner {
+    private final Class<?> classTest;
 
-    public TestRunner(Class<T> classTest){
+    public TestRunner(Class<?> classTest){
         this.classTest  = classTest;
     }
 
@@ -22,47 +20,32 @@ public class TestRunner<T> {
 
         ArrayList<Method> testMethods = getAnnotatedMethods(classTest, Test.class);
         for(Method testMethod : testMethods){
-            runTest(testMethod);
+            boolean isPassed = runTest(testMethod);
             stats.saveTestResult(testMethod.getName(), isPassed);
         }
 
         stats.printStats();
     }
 
-    private void runTest(Method testMethod){
-
-        ArrayList<Method> beforeMethods = getAnnotatedMethods(classTest, Before.class);
-        ArrayList<Method> afterMethods = getAnnotatedMethods(classTest, After.class);
-
+    private boolean runTest(Method testMethod){
+        boolean isPassed = false;
         Object testObject = null;
-
         try{
-            Constructor<T> constructor = classTest.getConstructor();
+            Constructor<?> constructor = classTest.getConstructor();
             testObject = constructor.newInstance();
 
-            for(Method beforeMethod : beforeMethods){
-                beforeMethod.invoke(testObject);
-            }
-            isBeforePassed = true;
+            invokeMethods(testObject, Before.class);
 
             testMethod.invoke(testObject);
-            isTestPassed = true;
 
+            isPassed = true;
         }catch(Exception e){
-            isTestPassed = false;
-            System.out.println(e.getCause().toString());
+            printError(e);
         }finally {
-            try{
-                for(Method afterMethod : afterMethods) {
-                    afterMethod.invoke(testObject);
-                }
-                isPassed = isBeforePassed && isTestPassed;
-
-            }catch(Exception e){
-                isPassed = false;
-                System.out.println(e.getCause().toString());
-            }
+            isPassed &= invokeMethodsFinally(testObject, After.class);
         }
+
+        return isPassed;
     }
 
     private static ArrayList<Method> getAnnotatedMethods(Class<?> clazz, Class<? extends Annotation> annotation){
@@ -76,4 +59,24 @@ public class TestRunner<T> {
         return annotatedMethods;
     }
 
+    private void invokeMethods(Object testObject, Class<? extends Annotation> annotation) throws InvocationTargetException, IllegalAccessException {
+            ArrayList<Method> methods = getAnnotatedMethods(classTest, annotation);
+            for (Method beforeMethod : methods) {
+                beforeMethod.invoke(testObject);
+            }
+    }
+
+    private boolean invokeMethodsFinally(Object testObject, Class<? extends Annotation> annotation){
+        try{
+            invokeMethods(testObject, annotation);
+            return true;
+        }catch(Exception e){
+            printError(e);
+            return false;
+        }
+    }
+
+    private void printError(Exception e){
+        System.out.println("     " + e.getCause().toString());
+    }
 }
