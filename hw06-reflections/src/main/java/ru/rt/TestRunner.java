@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TestRunner {
     private final Class<?> classTest;
@@ -18,7 +19,7 @@ public class TestRunner {
     public void runAllTests(){
         TestStat stats = new TestStat();
 
-        ArrayList<Method> testMethods = getAnnotatedMethods(classTest, Test.class);
+        List<Method> testMethods = getAnnotatedMethods(classTest, Test.class);
         for(Method testMethod : testMethods){
             boolean isPassed = runTest(testMethod);
             stats.saveTestResult(testMethod.getName(), isPassed);
@@ -48,7 +49,7 @@ public class TestRunner {
         return isPassed;
     }
 
-    private static ArrayList<Method> getAnnotatedMethods(Class<?> clazz, Class<? extends Annotation> annotation){
+    private static List<Method> getAnnotatedMethods(Class<?> clazz, Class<? extends Annotation> annotation){
         Method[] clazzMethods = clazz.getDeclaredMethods();
         ArrayList<Method> annotatedMethods = new ArrayList<>();
         for (Method method : clazzMethods){
@@ -60,7 +61,7 @@ public class TestRunner {
     }
 
     private void invokeMethods(Object testObject, Class<? extends Annotation> annotation) throws InvocationTargetException, IllegalAccessException {
-            ArrayList<Method> methods = getAnnotatedMethods(classTest, annotation);
+            List<Method> methods = getAnnotatedMethods(classTest, annotation);
             for (Method beforeMethod : methods) {
                 beforeMethod.invoke(testObject);
             }
