@@ -23,7 +23,8 @@ class TestLogingTest {
 
     @Test
     void calculation1Test() {
-        TestLogingInerface testLoging = TestInvocation.createMyClass();
+        TestLogingInterface testLogingObj = new TestLoging();
+        TestLogingInterface testLoging = TestInvocation.createMyClass(testLogingObj);
         testLoging.calculation1(1);
         String outString = "executed method: calculation1, param(s): [1]";
 
@@ -32,7 +33,8 @@ class TestLogingTest {
 
     @Test
     void calculation11Test() {
-        TestLogingInerface testLoging = TestInvocation.createMyClass();
+        TestLogingInterface testLogingObj = new TestLoging();
+        TestLogingInterface testLoging = TestInvocation.createMyClass(testLogingObj);
         testLoging.calculation1("Test","OTUS");
         String outString = "executed method: calculation1, param(s): [Test, OTUS]";
 
@@ -41,7 +43,8 @@ class TestLogingTest {
 
     @Test
     void calculation2Test() {
-        TestLogingInerface testLoging = TestInvocation.createMyClass();
+        TestLogingInterface testLogingObj = new TestLoging();
+        TestLogingInterface testLoging = TestInvocation.createMyClass(testLogingObj);
         testLoging.calculation2(1,"2");
         String outString = "executed method: calculation2, param(s): [1, 2]";
 
@@ -50,7 +53,8 @@ class TestLogingTest {
 
     @Test
     void calculation3Test() {
-        TestLogingInerface testLoging = TestInvocation.createMyClass();
+        TestLogingInterface testLogingObj = new TestLoging();
+        TestLogingInterface testLoging = TestInvocation.createMyClass(testLogingObj);
         testLoging.calculation3(0,1,"2",true);
         String outString = "executed method: calculation3, param(s): [0, 1, 2, true]";
 
@@ -59,7 +63,8 @@ class TestLogingTest {
 
     @Test
     void calculation4Test() {
-        TestLogingInerface testLoging = TestInvocation.createMyClass();
+        TestLogingInterface testLogingObj = new TestLoging();
+        TestLogingInterface testLoging = TestInvocation.createMyClass(testLogingObj);
         testLoging.calculation4(1.0);
         String outString = "calculation4 is not annotated @Log";
 

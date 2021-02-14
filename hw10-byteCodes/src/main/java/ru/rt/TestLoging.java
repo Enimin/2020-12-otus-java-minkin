@@ -2,7 +2,7 @@ package ru.rt;
 
 import ru.rt.annotations.Log;
 
-public class TestLoging implements TestLogingInerface{
+public class TestLoging implements TestLogingInterface {
 
     @Log
     @Override

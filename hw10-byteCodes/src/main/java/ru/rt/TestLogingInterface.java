@@ -1,6 +1,6 @@
 package ru.rt;
 
-public interface TestLogingInerface {
+public interface TestLogingInterface {
     void calculation1(int param1);
 
     void calculation1(String param1, String param2);
