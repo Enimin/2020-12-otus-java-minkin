@@ -7,19 +7,24 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TestRunner {
     private final Class<?> classTest;
+    private final Map<Class<?>, List<Method>> annotatedMethods;
 
     public TestRunner(Class<?> classTest){
         this.classTest  = classTest;
+        var annotations = (Class<? extends Annotation>[]) new Class[]{Test.class, Before.class, After.class};
+        this.annotatedMethods = getAnnotatedMethods(annotations);
     }
 
     public void runAllTests(){
         TestStat stats = new TestStat();
 
-        List<Method> testMethods = getAnnotatedMethods(classTest, Test.class);
+        List<Method> testMethods = annotatedMethods.get(Test.class);
         for(Method testMethod : testMethods){
             boolean isPassed = runTest(testMethod);
             stats.saveTestResult(testMethod.getName(), isPassed);
@@ -49,19 +54,25 @@ public class TestRunner {
         return isPassed;
     }
 
-    private static List<Method> getAnnotatedMethods(Class<?> clazz, Class<? extends Annotation> annotation){
-        Method[] clazzMethods = clazz.getDeclaredMethods();
-        ArrayList<Method> annotatedMethods = new ArrayList<>();
+    private Map<Class<?>, List<Method>> getAnnotatedMethods(Class<? extends Annotation>[] annotations){
+        Map<Class<?>, List<Method>> annotatedMethods = new HashMap<>();
+        for (Class<? extends Annotation> annotation : annotations){
+            annotatedMethods.put(annotation, new ArrayList<>());
+        }
+        Method[] clazzMethods = classTest.getDeclaredMethods();
         for (Method method : clazzMethods){
-            if (method.isAnnotationPresent(annotation)) {
-                annotatedMethods.add(method);
+            for (Class<? extends Annotation> annotation : annotations){
+                if (method.isAnnotationPresent(annotation)) {
+                    List<Method> methods = annotatedMethods.get(annotation);
+                    methods.add(method);
+                }
             }
         }
         return annotatedMethods;
     }
 
     private void invokeMethods(Object testObject, Class<? extends Annotation> annotation) throws InvocationTargetException, IllegalAccessException {
-            List<Method> methods = getAnnotatedMethods(classTest, annotation);
+            List<Method> methods = annotatedMethods.get(annotation);
             for (Method beforeMethod : methods) {
                 beforeMethod.invoke(testObject);
             }
