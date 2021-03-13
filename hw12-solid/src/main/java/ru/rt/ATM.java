@@ -6,7 +6,6 @@ import ru.rt.interfaces.*;
 import java.util.*;
 
 public class ATM implements IMediator {
-    private final IDisplaying display;
     private final IVault vault;
     private final IDispensing dispenser;
     private final IAccepting acceptor;
@@ -14,7 +13,6 @@ public class ATM implements IMediator {
     private Transaction transaction;
 
     public ATM(){
-        display = new Display();
         vault = new Vault(this);
         dispenser = new Dispenser(this, vault);
         acceptor = new Acceptor(this, vault);
@@ -26,15 +24,15 @@ public class ATM implements IMediator {
             balance = reculcBalance();
         }
         if (sender == acceptor && event == Events.NOT_VALID_NOTE){
-            display.display("Не удалось распознать купюру");
+            System.out.println("Не удалось распознать купюру");
         }
         if (sender == dispenser && event == Events.RETURN_NOTES){
             balance = reculcBalance();
-            display.display("Наличные возвращены в хранилище");
+            System.out.println("Наличные возвращены в хранилище");
         }
         if (sender == dispenser && event == Events.TRANSACTION_END){
             balance = reculcBalance();
-            display.display(transaction.toString());
+            System.out.println(transaction.toString());
         }
     }
 
@@ -51,7 +49,7 @@ public class ATM implements IMediator {
             checkVault(note.denomination());
             acceptor.takeNote(note);
         } catch (RackIsEmpty | WrongDenomination e) {
-            display.display(e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -61,7 +59,7 @@ public class ATM implements IMediator {
             Transaction transaction = decomposeSum(sum);
             dispenser.giveOutNotes(transaction);
         } catch (BalanceIsZero | NotEnoughMoney | WrongMultiple e) {
-            display.display(e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
