@@ -68,10 +68,8 @@ class ATMTest {
                 });
 
         String displayMessage = "Кассета уже установлена";
-//        String displayMessage = "";
 
         assertEquals(displayMessage, exception.getMessage());
-//        assertEquals(displayMessage, out.toString().trim());
     }
 
     @Test
@@ -89,10 +87,8 @@ class ATMTest {
                 });
 
         String displayMessage = "Нет такой кассеты";
-//        String displayMessage = "";
 
         assertEquals(displayMessage, exception.getMessage());
-//        assertEquals(displayMessage, out.toString().trim());
     }
 
     @Test
@@ -111,10 +107,8 @@ class ATMTest {
                 });
 
         String displayMessage = "В хранилище нет кассет";
-//        String displayMessage = "";
 
         assertEquals(displayMessage, exception.getMessage());
-//        assertEquals(displayMessage, out.toString().trim());
     }
 
     @Test
