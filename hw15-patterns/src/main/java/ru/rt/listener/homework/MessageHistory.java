@@ -2,21 +2,38 @@ package ru.rt.listener.homework;
 
 import ru.rt.model.Message;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MessageHistory implements Storageable {
-    Map<Message, Message> history = new HashMap<>();
+    private final Map<Integer, MessagePair> history = new HashMap<>();
 
     @Override
     public void add(Message oldMsg, Message newMsg) {
-        history.put(oldMsg.copy(), newMsg.copy());
+        history.put(history.size(), new MessagePair(oldMsg.copy(), newMsg.copy()));
     }
 
+    @Override
     public Message getLastOldMsg(){
-        List<Message> keys =  new ArrayList<>(history.keySet());
-        return keys.get(history.size()-1);
+        int maxKey = history.keySet().size() - 1;
+        return history.get(maxKey).oldMessage();
+    }
+}
+
+class MessagePair {
+    private final Message oldMessage;
+    private final Message newMessage;
+
+    public MessagePair(Message oldMessage, Message newMessage){
+        this.oldMessage = oldMessage;
+        this.newMessage = newMessage;
+    }
+
+    public Message oldMessage(){
+        return oldMessage.copy();
+    }
+
+    public Message newMessage(){
+        return newMessage.copy();
     }
 }
