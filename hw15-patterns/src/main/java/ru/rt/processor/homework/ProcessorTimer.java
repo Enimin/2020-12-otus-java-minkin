@@ -19,7 +19,7 @@ public class ProcessorTimer implements Processor {
         var seconds = currTime.instant().getEpochSecond();
         if ((seconds & 1) == 0) {
             var formatDate = new SimpleDateFormat("ss");
-            throw new RuntimeException("Четная секунда: " + formatDate.format(Date.from(currTime.instant())));
+            throw new SecondIsEven("Четная секунда: " + formatDate.format(Date.from(currTime.instant())));
         }
         return message.toBuilder().build();
     }

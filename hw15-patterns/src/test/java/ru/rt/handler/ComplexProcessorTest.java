@@ -12,6 +12,7 @@ import ru.rt.processor.Processor;
 import ru.rt.processor.ProcessorUpperField10;
 import ru.rt.processor.homework.ProcessorSwapValuesOfFields11_12;
 import ru.rt.processor.homework.ProcessorTimer;
+import ru.rt.processor.homework.SecondIsEven;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -133,13 +134,12 @@ class ComplexProcessorTest {
 
         var evenClock = Clock.fixed(Instant.parse("2021-01-01T00:00:02.00Z"), ZoneId.systemDefault());
         List<Processor> evenProcessors = List.of(new ProcessorTimer(evenClock));
-        var evenProcessor = new ComplexProcessor(evenProcessors, (ex) -> {
-            //????
-            throw new TestException(ex.getMessage());
-        });
+        Exception[] complexProcessorException = {new Exception()};
+        var evenProcessor = new ComplexProcessor(evenProcessors, (ex) -> complexProcessorException[0] = ex);
 
-//????        assertThatCode(() -> evenProcessor.handle(message)).isInstanceOf(SecondIsEven.class).hasMessage("Четная секунда: 02");
-        assertThatCode(() -> evenProcessor.handle(message)).isInstanceOf(TestException.class).hasMessage("Четная секунда: 02");
+        var newMessage = evenProcessor.handle(message);
+
+        assertEquals(complexProcessorException[0].getClass(), SecondIsEven.class);
     }
 
     @Test
