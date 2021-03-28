@@ -31,6 +31,10 @@ allprojects {
             dependency("org.assertj:assertj-core:latest.release")
             dependency("org.mockito:mockito-core:latest.release")
             dependency("org.mockito:mockito-junit-jupiter:latest.release")
+            dependency("com.fasterxml.jackson.core:jackson-databind:latest.release")
+            dependency("ch.qos.logback:logback-classic:latest.release")
+            dependency("org.flywaydb:flyway-core:latest.release")
+            dependency("org.postgresql:postgresql:latest.release")
         }
     }
 }

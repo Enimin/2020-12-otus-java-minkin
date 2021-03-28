@@ -4,4 +4,8 @@ include 'hw04-generics'
 include 'hw06-reflections'
 include 'hw08-gc'
 include 'hw10-byteCodes'
+include 'hw12-solid'
+include 'hw15-patterns'
+include 'hw16-io'
+include 'hw18-jdbc'
 
