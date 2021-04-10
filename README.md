@@ -16,3 +16,8 @@
 * [Аннотации.](hw06-reflections)
 * [Сборщик мусора.](-)
 * [Байт код, class-loader, инструментация, asm.](hw10-byteCodes)
+* [Концепты проектирования ООП.](hw12-solid)
+* [Паттерны](hw15-patterns)
+* [Сериализация](hw16-io)
+* [JDBC](hw18-jdbc)
+* [JPQL](hw21-jpql)
