@@ -18,20 +18,22 @@ public class Client implements Cloneable {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(targetEntity = AddressDataSet.class, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_id", updatable = false)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "address_id")
     private AddressDataSet address;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name="client_id", updatable = false)
-    private List<PhoneDataSet> phones = new ArrayList<>();
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PhoneDataSet> phones;
 
     public Client() {
     }
 
     public Client(String name) {
-        this.id = null;
-        this.name = name;
+        this(null, name, null, new ArrayList<>());
+    }
+
+    public Client(Long id, String name, AddressDataSet address) {
+        this(id, name, address, new ArrayList<>());
     }
 
     public Client(Long id, String name, AddressDataSet address, List<PhoneDataSet> phones) {
@@ -43,13 +45,14 @@ public class Client implements Cloneable {
 
     @Override
     public Client clone() {
-        return new Client(this.id,
-                          this.name,
-                          this.address.clone(),
-                          new ArrayList<>(this.phones
-                                              .stream()
-                                              .map(PhoneDataSet::clone)
-                                              .collect(Collectors.toList())));
+        var cloneClient = new Client(this.id,
+                                     this.name,
+                                     this.address.clone());
+        cloneClient.setPhones(this.phones
+                                  .stream()
+                                  .map(phone -> phone.clone(cloneClient))
+                                  .collect(Collectors.toList()));
+        return cloneClient;
     }
 
     public Long getId() {
@@ -85,10 +88,12 @@ public class Client implements Cloneable {
     }
 
     public void setPhone(PhoneDataSet phone) {
+        phone.setClient(this);
         phones.add(phone);
     }
 
     public void delPhone(PhoneDataSet phone) {
+        phone.setClient(null);
         phones.remove(phone);
     }
 

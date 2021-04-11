@@ -14,21 +14,25 @@ public class PhoneDataSet {
     @Column(name = "number")
     private String number;
 
+    @ManyToOne
+    @JoinColumn(name="client_id", nullable = false)
+    private Client client;
+
     public PhoneDataSet() {
     }
 
-    public PhoneDataSet(Long id, String number) {
+    public PhoneDataSet(Long id, String number, Client client) {
         this.id = id;
         this.number = number;
+        this.client = client;
     }
 
     public PhoneDataSet(String number) {
         this.number = number;
     }
 
-    @Override
-    public PhoneDataSet clone() {
-        return new PhoneDataSet(this.id, this.number);
+    public PhoneDataSet clone(Client newClient) {
+        return new PhoneDataSet(this.id, this.number, newClient);
     }
 
     public Long getId() {
@@ -45,6 +49,10 @@ public class PhoneDataSet {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     @Override
