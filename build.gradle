@@ -32,6 +32,14 @@ allprojects {
             dependency("org.mockito:mockito-core:latest.release")
             dependency("org.mockito:mockito-junit-jupiter:latest.release")
             dependency("com.fasterxml.jackson.core:jackson-databind:latest.release")
+            dependency("ch.qos.logback:logback-classic:latest.release")
+            dependency("org.flywaydb:flyway-core:latest.release")
+            dependency("org.postgresql:postgresql:latest.release")
+            dependency("org.hibernate:hibernate-core:latest.release")
+            dependency("com.zaxxer:HikariCP:latest.release")
+            dependency("javax.persistence:persistence-api:latest.release")
+            dependency("org.testcontainers:junit-jupiter:latest.release")
+            dependency("org.testcontainers:postgresql:latest.release")
         }
     }
 }
