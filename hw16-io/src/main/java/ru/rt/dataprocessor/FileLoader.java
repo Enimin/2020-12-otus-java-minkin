@@ -35,6 +35,7 @@ public class FileLoader implements Loader {
         } catch (IOException e) {
             throw new FileProcessException(e.getMessage());
         }
+        //gson.fromJson(gsonFileAsString, new TypeToken<List<Measurement>>() {}.getType());
         return measurements;
     }
 }

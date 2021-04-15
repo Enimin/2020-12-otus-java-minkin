@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 public class FileSerializer implements Serializer {
-    File jsonFile;
+    private final File jsonFile;
 
     public FileSerializer(String fileName) {
         jsonFile = Paths.get(fileName).toFile();
