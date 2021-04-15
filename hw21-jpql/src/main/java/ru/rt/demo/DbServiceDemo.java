@@ -40,13 +40,13 @@ public class DbServiceDemo {
 
         var clientFirstData = new Client("dbServiceFirst");
         clientFirstData.setAddress(new AddressDataSet("First street"));
-        clientFirstData.setPhone(new PhoneDataSet("123456"));
-        clientFirstData.setPhone(new PhoneDataSet("789012"));
+        clientFirstData.addPhone(new PhoneDataSet("123456"));
+        clientFirstData.addPhone(new PhoneDataSet("789012"));
         dbServiceClient.saveClient(clientFirstData);
 
         var clientSecondData = new Client("dbServiceSecond");
         clientSecondData.setAddress(new AddressDataSet("Second street"));
-        clientSecondData.setPhone(new PhoneDataSet("01-234-567"));
+        clientSecondData.addPhone(new PhoneDataSet("01-234-567"));
 
         var clientSecond = dbServiceClient.saveClient(clientSecondData);
         var clientSecondSelected = dbServiceClient.getClient(clientSecond.getId())

@@ -22,7 +22,7 @@ public class Client implements Cloneable {
     @JoinColumn(name = "address_id")
     private AddressDataSet address;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PhoneDataSet> phones;
 
     public Client() {
@@ -87,7 +87,7 @@ public class Client implements Cloneable {
         this.phones = phones;
     }
 
-    public void setPhone(PhoneDataSet phone) {
+    public void addPhone(PhoneDataSet phone) {
         phone.setClient(this);
         phones.add(phone);
     }
