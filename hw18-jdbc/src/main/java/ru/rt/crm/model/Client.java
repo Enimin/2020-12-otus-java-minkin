@@ -3,8 +3,8 @@ package ru.rt.crm.model;
 @Table(tableName = "client")
 public class Client {
     @Id
-    private final Long id;
-    private final String name;
+    private Long id;
+    private String name;
 
     public Client(Long id, String name) {
         this.id = id;

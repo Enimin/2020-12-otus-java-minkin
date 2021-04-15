@@ -93,13 +93,13 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
 
     private List<Object> getFieldValues(T obj){
         List<Object> values = new ArrayList<>();
-        entityClassMetaData.getFieldsWithoutId().forEach(field -> {
-            try {
-                values.add(field.get(obj));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+        try {
+            for (Field field : entityClassMetaData.getFieldsWithoutId()){
+                    values.add(field.get(obj));
             }
-        });
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         return values;
     }
 
