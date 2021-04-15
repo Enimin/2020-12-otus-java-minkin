@@ -20,3 +20,4 @@
 * [Паттерны](hw15-patterns)
 * [Сериализация](hw16-io)
 * [JDBC](hw18-jdbc)
+* [JPQL](hw21-jpql)
