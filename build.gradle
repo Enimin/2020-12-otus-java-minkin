@@ -40,6 +40,14 @@ allprojects {
             dependency("javax.persistence:persistence-api:latest.release")
             dependency("org.testcontainers:junit-jupiter:latest.release")
             dependency("org.testcontainers:postgresql:latest.release")
+            dependency("org.eclipse.jetty:jetty-servlet:latest.release")
+            dependency("org.eclipse.jetty:jetty-server:latest.release")
+            dependency("org.eclipse.jetty:jetty-webapp:latest.release")
+            dependency("org.eclipse.jetty:jetty-security:latest.release")
+            dependency("org.eclipse.jetty:jetty-http:latest.release")
+            dependency("org.eclipse.jetty:jetty-io:latest.release")
+            dependency("org.eclipse.jetty:jetty-util:latest.release")
+            dependency("org.freemarker:freemarker:latest.release")
         }
     }
 }
