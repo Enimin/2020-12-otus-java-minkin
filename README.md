@@ -21,3 +21,6 @@
 * [Сериализация](hw16-io)
 * [JDBC](hw18-jdbc)
 * [JPQL](hw21-jpql)
+* [Типы ссылок. Кэширование.](-)
+* [Web сервер.](hw24-webServer)
+* [Dependency injection.](hw25-di)
