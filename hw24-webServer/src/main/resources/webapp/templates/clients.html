@@ -1,0 +1,82 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Clients</title>
+    <link rel="stylesheet" href="../css/clients.css">
+</head>
+
+<script>
+    function newPhone(but){
+
+        let old_name = but.htmlFor;
+        let new_name = but.htmlFor + "1";
+
+        let label = document.querySelector("#label");
+        let clone_label = label.cloneNode();
+        clone_label.innerText = "-";
+        clone_label.htmlFor = old_name;
+        clone_label.id = "";
+        clone_label.onclick =  function() { delPhone(clone_label); }
+        but.before(clone_label);
+
+        let br = document.createElement("br");
+        but.before(br)
+
+        let input = document.querySelector("#" + old_name);
+        let clone_input = input.cloneNode();
+        clone_input.id = new_name;
+        clone_input.value = "";
+        but.htmlFor = new_name;
+        but.before(clone_input);
+    }
+
+    function delPhone(but){
+        let input = document.querySelector("#" + but.htmlFor);
+        let br = but.nextSibling;
+        input.remove();
+        br.remove();
+        but.remove();
+    }
+</script>
+
+<body>
+<h4>User: ${user.getLogin()}</h4>
+
+<div id="div_form">
+    <form id="form" action="/clients" method="post" >
+        <input name="name" type="text" placeholder="Name"><br>
+        <input name="address" type="text" placeholder="Address"><br>
+        <input id="phone" name="phones" type="text" placeholder="Phone"><label id="label" for="phone" onclick="newPhone(this)">+</label>
+
+        <input type="submit" value="save"/>
+    </form>
+</div>
+
+<div id="clients">
+    <table>
+        <caption>Clients</caption>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phones</th>
+        </tr>
+        <#if clients??>
+        <#list clients>
+            <#items as client>
+                <tr class="${client?item_parity}Row">
+                    <td>${client.getName()}
+                    <td>${client.getAddress().getStreet()}
+                    <td><#if client.getPhones()??>
+                    <#list client.getPhones()>
+                            <#items as phone>
+                                ${phone.getNumber()}<br>
+                            </#items>
+                        </#list>
+                    </#if>
+                </tr>
+            </#items>
+        </#list>
+        </#if>
+    </table>
+</div>
+</body>
+</html>
