@@ -6,7 +6,8 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import ru.rt.dao.DaoFactory;
+import ru.rt.crm.service.DbServiceClientImpl;
+import ru.rt.crm.service.DbServiceUserImpl;
 import ru.rt.helpers.FileSystemHelper;
 import ru.rt.services.TemplateProcessor;
 import ru.rt.servlet.ClientServlet;
@@ -17,14 +18,16 @@ public class WebServerSimple implements WebServer {
     private static final String START_PAGE_NAME = "index.html";
     private static final String COMMON_RESOURCES_DIR = "webapp";
 
-    private final DaoFactory daoFactory;
+    private final DbServiceClientImpl dbServiceClient;
+    private final DbServiceUserImpl dbServiceUser;
     protected final TemplateProcessor templateProcessor;
     private final Server server;
 
-    public WebServerSimple(int port, DaoFactory daoFactory, TemplateProcessor templateProcessor) {
+    public WebServerSimple(int port, DbServiceClientImpl dbServiceClient, DbServiceUserImpl dbServiceUser, TemplateProcessor templateProcessor) {
         server = new Server(port);
         this.templateProcessor = templateProcessor;
-        this.daoFactory = daoFactory;
+        this.dbServiceClient = dbServiceClient;
+        this.dbServiceUser = dbServiceUser;
     }
 
     @Override
@@ -72,8 +75,8 @@ public class WebServerSimple implements WebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new ClientServlet(templateProcessor, daoFactory.getClientDao())), "/clients");
-        servletContextHandler.addServlet(new ServletHolder(new UserServlet(templateProcessor, daoFactory.getUserDao())), "/users");
+        servletContextHandler.addServlet(new ServletHolder(new ClientServlet(templateProcessor, dbServiceClient)), "/clients");
+        servletContextHandler.addServlet(new ServletHolder(new UserServlet(templateProcessor, dbServiceUser)), "/users");
         return servletContextHandler;
     }
 }

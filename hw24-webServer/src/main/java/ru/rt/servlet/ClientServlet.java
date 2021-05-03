@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import ru.rt.crm.model.AddressDataSet;
 import ru.rt.crm.model.Client;
 import ru.rt.crm.model.PhoneDataSet;
-import ru.rt.dao.Dao;
+import ru.rt.crm.service.DbServiceClientImpl;
 import ru.rt.services.TemplateProcessor;
 
 import java.io.IOException;
@@ -21,16 +21,16 @@ public class ClientServlet extends HttpServlet {
     private static final String USER_KEY = "user";
 
     private final TemplateProcessor templateProcessor;
-    private final Dao<Client> clientDao;
+    private final DbServiceClientImpl dbServiceClient;
 
-    public ClientServlet(TemplateProcessor templateProcessor, Dao<Client> clientDao) {
-        this.clientDao = clientDao;
+    public ClientServlet(TemplateProcessor templateProcessor, DbServiceClientImpl dbServiceClient) {
+        this.dbServiceClient = dbServiceClient;
         this.templateProcessor = templateProcessor;
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        var clients = clientDao.findAll();
+        var clients = dbServiceClient.findAll();
         var user = request.getSession().getAttribute(USER_KEY);
 
         response.setContentType("text/html;charset=UTF-8");
@@ -39,7 +39,7 @@ public class ClientServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         var client = createClient(request.getParameterMap());
-        clientDao.save(client);
+        this.dbServiceClient.saveClient(client);
         response.sendRedirect("/clients");
     }
 

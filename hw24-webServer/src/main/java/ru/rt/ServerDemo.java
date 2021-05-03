@@ -1,10 +1,16 @@
 package ru.rt;
 
+import org.hibernate.cfg.Configuration;
+import ru.rt.core.repository.DataTemplateHibernate;
+import ru.rt.core.repository.HibernateUtils;
+import ru.rt.core.sessionmanager.TransactionManagerHibernate;
+import ru.rt.crm.dbmigrations.MigrationsExecutorFlyway;
 import ru.rt.crm.model.AddressDataSet;
 import ru.rt.crm.model.Client;
 import ru.rt.crm.model.PhoneDataSet;
 import ru.rt.crm.model.Users;
-import ru.rt.dao.DaoFactory;
+import ru.rt.crm.service.DbServiceClientImpl;
+import ru.rt.crm.service.DbServiceUserImpl;
 import ru.rt.server.WebServer;
 import ru.rt.server.WebServerWithFilterBasedSecurity;
 import ru.rt.services.TemplateProcessor;
@@ -15,40 +21,49 @@ import ru.rt.services.UserAuthServiceImpl;
 public class ServerDemo {
     private static final int WEB_SERVER_PORT = 8081;
     private static final String TEMPLATES_DIR = "/webapp/templates/";
+    public static final String HIBERNATE_CFG_FILE = "hibernate.cfg.xml";
 
     public static void main(String[] args) throws Exception {
-        var daoFactory = new DaoFactory();
-
-        dataPrepare(daoFactory);
+        var configuration = new Configuration().configure(HIBERNATE_CFG_FILE);
+        migration(configuration);
+        var transactionManager = getTransactionManager(configuration);
+        var dbServiceUser = getDbServiceUser(transactionManager);
+        var dbServiceClient = getDbServiceClient(transactionManager);
 
         TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
-        UserAuthService authService = new UserAuthServiceImpl(daoFactory.getUserDao());
+        UserAuthService authService = new UserAuthServiceImpl(dbServiceUser);
 
-        WebServer webServer = new WebServerWithFilterBasedSecurity(WEB_SERVER_PORT, authService, daoFactory, templateProcessor);
+        WebServer webServer = new WebServerWithFilterBasedSecurity(WEB_SERVER_PORT, authService, dbServiceClient, dbServiceUser, templateProcessor);
 
         webServer.start();
         webServer.join();
     }
 
-    private static void dataPrepare(DaoFactory daoFactory){
+    private static void migration(Configuration configuration){
+        var dbUrl = configuration.getProperty("hibernate.connection.url");
+        var dbUserName = configuration.getProperty("hibernate.connection.username");
+        var dbPassword = configuration.getProperty("hibernate.connection.password");
 
-        var user = daoFactory.getUserDao();
-        var admin = new Users("admin", "admin");
-        user.save(admin);
-        var simpleUser = new Users("user", "1");
-        user.save(simpleUser);
-
-        var client = daoFactory.getClientDao();
-        var firstClient = new Client("dbServiceFirst");
-        firstClient.setAddress(new AddressDataSet("First street"));
-        firstClient.setPhone(new PhoneDataSet("123456"));
-        firstClient.setPhone(new PhoneDataSet("789012"));
-        client.save(firstClient);
-
-        var secondClient = new Client("dbServiceSecond");
-        secondClient.setAddress(new AddressDataSet("Second street"));
-        secondClient.setPhone(new PhoneDataSet("01-234-567"));
-        client.save(secondClient);
-
+        new MigrationsExecutorFlyway(dbUrl, dbUserName, dbPassword).executeMigrations();
     }
+
+    private static DbServiceClientImpl getDbServiceClient(TransactionManagerHibernate transactionManager) {
+        var clientTemplate = new DataTemplateHibernate<>(Client.class);
+        return new DbServiceClientImpl(transactionManager, clientTemplate);
+    }
+
+    private static DbServiceUserImpl getDbServiceUser(TransactionManagerHibernate transactionManager) {
+        var usersTemplate = new DataTemplateHibernate<>(Users.class);
+        return new DbServiceUserImpl(transactionManager, usersTemplate);
+    }
+
+    private static TransactionManagerHibernate getTransactionManager(Configuration configuration) {
+        var sessionFactory = HibernateUtils.buildSessionFactory(configuration,
+                                                                            Client.class,
+                                                                            AddressDataSet.class,
+                                                                            PhoneDataSet.class,
+                                                                            Users.class);
+        return new TransactionManagerHibernate(sessionFactory);
+    }
+
 }

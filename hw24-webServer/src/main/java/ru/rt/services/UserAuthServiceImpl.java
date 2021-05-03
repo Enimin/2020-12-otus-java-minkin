@@ -1,15 +1,16 @@
 package ru.rt.services;
 
 import ru.rt.crm.model.Users;
-import ru.rt.dao.UserDao;
+import ru.rt.crm.service.DbServiceUserImpl;
 
 public class UserAuthServiceImpl implements UserAuthService {
 
-    private final UserDao userDao;
+    private final DbServiceUserImpl dbServiceUser;
     private Users user;
 
-    public UserAuthServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+
+    public UserAuthServiceImpl(DbServiceUserImpl dbServiceUser) {
+        this.dbServiceUser = dbServiceUser;
     }
 
     @Override
@@ -20,9 +21,9 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Override
     public boolean authenticate(String login, String password) {
         this.user = null;
-        var dao = userDao.getByLogin(login);
-        dao.ifPresent(user -> this.user = user);
-        return dao.map(user -> user != null && user.getPassword().equals(password))
+        var dbUser = dbServiceUser.getUserByLogin(login);
+        dbUser.ifPresent(user -> this.user = user);
+        return dbUser.map(user -> user != null && user.getPassword().equals(password))
                   .orElse(false);
     }
 
