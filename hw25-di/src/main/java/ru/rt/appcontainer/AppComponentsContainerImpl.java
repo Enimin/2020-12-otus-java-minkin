@@ -6,6 +6,7 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import ru.rt.appcontainer.api.AppComponent;
 import ru.rt.appcontainer.api.AppComponentsContainer;
 import ru.rt.appcontainer.api.AppComponentsContainerConfig;
+import ru.rt.exceptions.InvocationMethodException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,10 +18,10 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     private final List<Object> appComponents = new ArrayList<>();
     private final Map<String, Object> appComponentsByName = new HashMap<>();
 
-    public AppComponentsContainerImpl(Class<?>... initialConfigClass) {
+    public AppComponentsContainerImpl(Class<?>... initialConfigClass) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationMethodException {
         processConfig(initialConfigClass);
     }
-    public AppComponentsContainerImpl(String packageName) {
+    public AppComponentsContainerImpl(String packageName) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationMethodException {
         var reflections = new Reflections(packageName,
                                         new TypeAnnotationsScanner(),
                                         new SubTypesScanner(false));
@@ -29,28 +30,34 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         processConfig(classes);
     }
 
-    private void processConfig(Class<?>... configClasses) {
+    private void processConfig(Class<?>... configClasses) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationMethodException {
         checkConfigClass(configClasses);
+        var classes = getSortedAppComponentsContainerConfig(configClasses);
+        prepareAndSetAppComponents(classes);
+    }
 
-        var classes = Arrays.stream(configClasses)
-                                       .sorted(Comparator.comparingInt(clazz -> clazz.getAnnotation(AppComponentsContainerConfig.class).order()))
-                                       .collect(Collectors.toList());
-
+    private void prepareAndSetAppComponents(List<Class<?>> classes) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvocationMethodException {
         for (Class<?> configClass : classes){
-            try {
-                var methods = Arrays.stream(configClass.getDeclaredMethods())
-                                                .filter(method -> method.isAnnotationPresent(AppComponent.class))
-                                                .sorted(Comparator.comparingInt(method -> method.getAnnotation(AppComponent.class).order()))
-                                                .collect(Collectors.toList());
-                var configInstance = configClass.getDeclaredConstructor().newInstance();
-                setAppComponents(configInstance, methods);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                e.printStackTrace();
-            }
+            var methods = getSortedMethodsAppComponent(configClass.getDeclaredMethods());
+            var configInstance = configClass.getDeclaredConstructor().newInstance();
+            setAppComponents(configInstance, methods);
         }
     }
 
-    private void setAppComponents(Object configInstance, List<Method> methods) {
+    private List<Class<?>> getSortedAppComponentsContainerConfig(Class<?>... configClasses){
+        return Arrays.stream(configClasses)
+                .sorted(Comparator.comparingInt(clazz -> clazz.getAnnotation(AppComponentsContainerConfig.class).order()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Method> getSortedMethodsAppComponent(Method[] methods){
+        return Arrays.stream(methods)
+                .filter(method -> method.isAnnotationPresent(AppComponent.class))
+                .sorted(Comparator.comparingInt(method -> method.getAnnotation(AppComponent.class).order()))
+                .collect(Collectors.toList());
+    }
+
+    private void setAppComponents(Object configInstance, List<Method> methods) throws InvocationMethodException {
         try {
             for (Method method: methods){
                 Object componentInstance = getComponentInstance(configInstance, method);
@@ -58,7 +65,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                 appComponentsByName.put(method.getAnnotation(AppComponent.class).name(), componentInstance);
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            throw new InvocationMethodException("Invocation method exception");
         }
     }
 
