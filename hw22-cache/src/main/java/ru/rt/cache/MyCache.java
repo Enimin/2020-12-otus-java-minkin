@@ -1,5 +1,8 @@
 package ru.rt.cache;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.ref.WeakReference;
 import java.util.*;
 
@@ -8,6 +11,8 @@ import java.util.*;
  * created on 14.12.18.
  */
 public class MyCache<K, V> implements HwCache<K, V> {
+    private static final Logger logger = LoggerFactory.getLogger(MyCache.class);
+
     private final WeakHashMap<K, V> cache = new WeakHashMap<>();
     private final List<WeakReference<HwListener<K, V>>> listeners = new ArrayList<>();
 
@@ -44,7 +49,11 @@ public class MyCache<K, V> implements HwCache<K, V> {
         for (WeakReference<HwListener<K, V>> ref: listeners) {
             var listener = ref.get();
             if (listener != null) {
-                listener.notify(key, value, action);
+                try {
+                    listener.notify(key, value, action);
+                }catch(RuntimeException e){
+                    logger.error("{} Stack: {}", e.getMessage(), Arrays.toString(e.getStackTrace()));
+                }
             }
             else{
                 listeners.remove(ref);

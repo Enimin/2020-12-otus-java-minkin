@@ -28,7 +28,7 @@ public class CacheDbServiceClientImpl implements DBServiceClient {
 
     @Override
     public Optional<Client> getClient(long id) {
-        var client  = Optional.ofNullable(cache.get(String.valueOf(id)));
+        var client  = Optional.ofNullable(cache.get(getCacheKey(id)));
         if (!client.isPresent()){
             client = dbServiceClient.getClient(id);
             client.ifPresent(value -> cache.put(value.getId().toString(), value));
@@ -41,5 +41,9 @@ public class CacheDbServiceClientImpl implements DBServiceClient {
         var clients = dbServiceClient.findAll();
         clients.forEach(client -> cache.put(client.getId().toString(), client));
         return clients;
+    }
+
+    private String getCacheKey(long id){
+        return String.valueOf(id);
     }
 }
