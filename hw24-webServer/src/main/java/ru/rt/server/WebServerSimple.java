@@ -6,8 +6,8 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import ru.rt.crm.service.DbServiceClientImpl;
-import ru.rt.crm.service.DbServiceUserImpl;
+import ru.rt.crm.service.DBServiceClient;
+import ru.rt.crm.service.DBServiceUser;
 import ru.rt.helpers.FileSystemHelper;
 import ru.rt.services.TemplateProcessor;
 import ru.rt.servlet.ClientServlet;
@@ -18,12 +18,12 @@ public class WebServerSimple implements WebServer {
     private static final String START_PAGE_NAME = "index.html";
     private static final String COMMON_RESOURCES_DIR = "webapp";
 
-    private final DbServiceClientImpl dbServiceClient;
-    private final DbServiceUserImpl dbServiceUser;
+    private final DBServiceClient dbServiceClient;
+    private final DBServiceUser dbServiceUser;
     protected final TemplateProcessor templateProcessor;
     private final Server server;
 
-    public WebServerSimple(int port, DbServiceClientImpl dbServiceClient, DbServiceUserImpl dbServiceUser, TemplateProcessor templateProcessor) {
+    public WebServerSimple(int port, DBServiceClient dbServiceClient, DBServiceUser dbServiceUser, TemplateProcessor templateProcessor) {
         server = new Server(port);
         this.templateProcessor = templateProcessor;
         this.dbServiceClient = dbServiceClient;

@@ -3,7 +3,7 @@ package ru.rt.servlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.rt.crm.service.DbServiceUserImpl;
+import ru.rt.crm.service.DBServiceUser;
 import ru.rt.services.TemplateProcessor;
 
 import java.io.IOException;
@@ -16,10 +16,10 @@ public class UserServlet extends HttpServlet {
     private static final String PAGE_TEMPLATE = "users.html";
     private static final String USER_KEY = "user";
 
-    private final DbServiceUserImpl dbServiceUser;
+    private final DBServiceUser dbServiceUser;
     private final TemplateProcessor templateProcessor;
 
-    public UserServlet(TemplateProcessor templateProcessor, DbServiceUserImpl dbServiceUser) {
+    public UserServlet(TemplateProcessor templateProcessor, DBServiceUser dbServiceUser) {
         this.templateProcessor = templateProcessor;
         this.dbServiceUser = dbServiceUser;
     }

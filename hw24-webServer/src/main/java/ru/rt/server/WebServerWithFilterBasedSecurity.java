@@ -4,8 +4,8 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import ru.rt.crm.service.DbServiceClientImpl;
-import ru.rt.crm.service.DbServiceUserImpl;
+import ru.rt.crm.service.DBServiceClient;
+import ru.rt.crm.service.DBServiceUser;
 import ru.rt.services.TemplateProcessor;
 import ru.rt.services.UserAuthService;
 import ru.rt.servlet.AuthorizationFilter;
@@ -18,8 +18,8 @@ public class WebServerWithFilterBasedSecurity extends WebServerSimple {
 
     public WebServerWithFilterBasedSecurity(int port,
                                             UserAuthService authService,
-                                            DbServiceClientImpl dbServiceClient,
-                                            DbServiceUserImpl dbServiceUser,
+                                            DBServiceClient dbServiceClient,
+                                            DBServiceUser dbServiceUser,
                                             TemplateProcessor templateProcessor) {
         super(port, dbServiceClient, dbServiceUser, templateProcessor);
         this.authService = authService;

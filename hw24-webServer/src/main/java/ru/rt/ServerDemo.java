@@ -9,6 +9,8 @@ import ru.rt.crm.model.AddressDataSet;
 import ru.rt.crm.model.Client;
 import ru.rt.crm.model.PhoneDataSet;
 import ru.rt.crm.model.Users;
+import ru.rt.crm.service.DBServiceClient;
+import ru.rt.crm.service.DBServiceUser;
 import ru.rt.crm.service.DbServiceClientImpl;
 import ru.rt.crm.service.DbServiceUserImpl;
 import ru.rt.server.WebServer;
@@ -47,12 +49,12 @@ public class ServerDemo {
         new MigrationsExecutorFlyway(dbUrl, dbUserName, dbPassword).executeMigrations();
     }
 
-    private static DbServiceClientImpl getDbServiceClient(TransactionManagerHibernate transactionManager) {
+    private static DBServiceClient getDbServiceClient(TransactionManagerHibernate transactionManager) {
         var clientTemplate = new DataTemplateHibernate<>(Client.class);
         return new DbServiceClientImpl(transactionManager, clientTemplate);
     }
 
-    private static DbServiceUserImpl getDbServiceUser(TransactionManagerHibernate transactionManager) {
+    private static DBServiceUser getDbServiceUser(TransactionManagerHibernate transactionManager) {
         var usersTemplate = new DataTemplateHibernate<>(Users.class);
         return new DbServiceUserImpl(transactionManager, usersTemplate);
     }

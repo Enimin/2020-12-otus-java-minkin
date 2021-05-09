@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import ru.rt.crm.model.Users;
 import ru.rt.services.UserAuthService;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class LoginServlet extends HttpServlet {
 
     private static final String PARAM_LOGIN = "login";
     private static final String PARAM_PASSWORD = "password";
-    private static final int MAX_INACTIVE_INTERVAL = 30;
+    private static final int MAX_INACTIVE_INTERVAL = 300;
     private static final String ADMIN_LOGIN = "admin";
     private static final String USER_KEY = "user";
 
@@ -35,11 +36,12 @@ public class LoginServlet extends HttpServlet {
 
         String name = request.getParameter(PARAM_LOGIN);
         String password = request.getParameter(PARAM_PASSWORD);
+        var user = new Users(name, password);
 
         if (userAuthService.authenticate(name, password)) {
-            request.getSession().setAttribute(USER_KEY, userAuthService.getUser());
             var location = getLocation(name);
             HttpSession session = request.getSession();
+            session.setAttribute(USER_KEY, user);
             session.setMaxInactiveInterval(MAX_INACTIVE_INTERVAL);
             response.sendRedirect(location);
         } else {

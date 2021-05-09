@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import ru.rt.crm.model.AddressDataSet;
 import ru.rt.crm.model.Client;
 import ru.rt.crm.model.PhoneDataSet;
-import ru.rt.crm.service.DbServiceClientImpl;
+import ru.rt.crm.service.DBServiceClient;
 import ru.rt.services.TemplateProcessor;
 
 import java.io.IOException;
@@ -21,9 +21,9 @@ public class ClientServlet extends HttpServlet {
     private static final String USER_KEY = "user";
 
     private final TemplateProcessor templateProcessor;
-    private final DbServiceClientImpl dbServiceClient;
+    private final DBServiceClient dbServiceClient;
 
-    public ClientServlet(TemplateProcessor templateProcessor, DbServiceClientImpl dbServiceClient) {
+    public ClientServlet(TemplateProcessor templateProcessor, DBServiceClient dbServiceClient) {
         this.dbServiceClient = dbServiceClient;
         this.templateProcessor = templateProcessor;
     }
