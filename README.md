@@ -24,3 +24,4 @@
 * [Типы ссылок. Кэширование.](hw22-cache)
 * [Web сервер.](hw24-webServer)
 * [Dependency injection.](hw25-di)
+* [Spring Data Jdbc.](hw28-springDataJdbc)
