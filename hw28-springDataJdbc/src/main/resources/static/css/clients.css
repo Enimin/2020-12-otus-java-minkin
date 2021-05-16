@@ -1,0 +1,52 @@
+body{
+    text-align:center;
+    margin: 20px;
+    padding: 0 0 0 0;
+    font-size: 14pt;
+}
+
+#div_form{
+    text-align: left;
+    border: 1px solid #99ccff;
+    background-color: #99ccff;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    width: 300px;
+}
+
+table, th, td{
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #0066cc;
+    border-collapse: collapse;
+    font-size: 14pt;
+    padding: 5px 20px;
+}
+
+th{
+    color: white;
+    background-color: #0066cc;
+}
+
+caption{
+    color: #0066cc;
+    font-weight: bold;
+}
+
+input{
+    height: 25px;
+    margin: 10px;
+    border-radius: 5px;
+    width: 200px;
+}
+
+label{
+    cursor: pointer;
+}
+
+.phoneNumber{
+    text-align:center;
+    width: 100%;
+}

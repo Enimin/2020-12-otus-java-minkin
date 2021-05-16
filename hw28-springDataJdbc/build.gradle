@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
+
+dependencies {
+    implementation 'org.flywaydb:flyway-core:latest.release'
+    implementation 'org.postgresql:postgresql:latest.release'
+    implementation 'com.google.code.findbugs:jsr305:latest.release'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc:latest.release'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:latest.release'
+    implementation 'org.springframework.boot:spring-boot-starter-web:latest.release'
+}
+
+test {
+    useJUnitPlatform()
+}
