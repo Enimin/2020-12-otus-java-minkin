@@ -13,16 +13,16 @@ import java.util.stream.Collectors;
 
 @Controller
 public class ClientController {
-    private final ClientRepository client;
+    private final ClientRepository clientRepository;
 
     public ClientController(ClientRepository dbServiceClient) {
-        this.client = dbServiceClient;
+        this.clientRepository = dbServiceClient;
     }
 
     @GetMapping("/")
     public String getClients(Model model){
         model.addAttribute("client", new Client());
-        model.addAttribute("clients", client.findAll());
+        model.addAttribute("clients", clientRepository.findAll());
         return "clients";
     }
 
@@ -36,7 +36,7 @@ public class ClientController {
         var clientAddress = new AddressDataSet(address);
         var clientPhones = phones.stream().map(PhoneDataSet::new).collect(Collectors.toSet());
         var client = new Client(name, clientAddress, clientPhones);
-        this.client.save(client);
+        this.clientRepository.save(client);
         return "redirect:/";
     }
 

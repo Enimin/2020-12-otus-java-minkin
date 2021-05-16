@@ -9,7 +9,7 @@ public class AddressDataSet {
     @Id
     private Long id;
     private String street;
-    private Long client_id;
+    private Long clientId;
 
     public AddressDataSet(){
     }

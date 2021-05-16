@@ -10,7 +10,7 @@ public class PhoneDataSet {
     @Id
     private Long id;
     private String number;
-    private Long client_id;
+    private Long clientId;
 
     public PhoneDataSet() {
     }

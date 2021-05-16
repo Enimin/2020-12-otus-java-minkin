@@ -48,11 +48,6 @@ public class Client implements Cloneable {
     }
 
     public AddressDataSet getAddress() {
-        var address = new AddressDataSet();
-        if (this.address != null){
-            address.setId(this.address.getId());
-            address.setStreet(this.address.getStreet());
-        }
         return address;
     }
 
@@ -61,10 +56,6 @@ public class Client implements Cloneable {
     }
 
     public Set<PhoneDataSet> getPhones() {
-        var phones = new HashSet<PhoneDataSet>();
-        if (this.phones != null){
-            phones.addAll(this.phones);
-        }
         return phones;
     }
 
