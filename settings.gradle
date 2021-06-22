@@ -17,4 +17,6 @@ include 'hw31-executors'
 include 'hw32-messagingSystem'
 include 'hw32-messagingSystem:MessageSystem'
 findProject(':hw32-messagingSystem:MessageSystem')?.name = 'MessageSystem'
+include 'hw33-multiprocess'
+
 
