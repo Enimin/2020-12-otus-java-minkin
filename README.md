@@ -25,5 +25,3 @@
 * [Web сервер.](hw24-webServer)
 * [Dependency injection.](hw25-di)
 * [Spring Data Jdbc.](hw28-springDataJdbc)
-* [Executors.](hw31-executors)
-* [Многопроцессные приложения.](hw33-multiprocess)
