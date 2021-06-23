@@ -23,6 +23,7 @@ public class GRPCClient {
     private static final int FIRST_VALUE = 0;
     private static final int LAST_VALUE = 30;
     private static final int CHECK_NUMBER_COUNT = 50;
+    private static final int TIMER_SECONDS = 1;
 
     private static final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private static final TreeMap<Integer, Boolean> serverNumbers = new TreeMap<>();
@@ -62,7 +63,7 @@ public class GRPCClient {
         });
 
         logger.info("\n\n\nNumbers client is starting...\n\n");
-        executorService.scheduleAtFixedRate(getCurrentValue(),1,1, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(getCurrentValue(),TIMER_SECONDS,TIMER_SECONDS, TimeUnit.SECONDS);
 
         latch.await();
 

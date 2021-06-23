@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 public class RemoteServiceImpl extends RemoteServiceGrpc.RemoteServiceImplBase {
     private static final Logger logger = LoggerFactory.getLogger(GRPCClient.class);
+    private static final int TIMER_SECONDS = 2;
+
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private int currentValue = 0;
     private int lastValue = 0;
@@ -25,7 +27,7 @@ public class RemoteServiceImpl extends RemoteServiceGrpc.RemoteServiceImplBase {
         this.lastValue = rangeMessage.getLastValue();
         this.responseObserver = responseObserver;
 
-        executorService.scheduleAtFixedRate(sendNextNumber(),0,2, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(sendNextNumber(),0,TIMER_SECONDS, TimeUnit.SECONDS);
     }
 
     private Runnable sendNextNumber(){
