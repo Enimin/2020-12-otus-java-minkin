@@ -12,9 +12,10 @@ import ru.otus.messagesystem.client.MsClient;
 import ru.otus.messagesystem.client.MsClientImpl;
 import ru.otus.messagesystem.message.MessageType;
 import ru.rt.crm.repository.ClientRepository;
-import ru.rt.handlers.GetUserDataRequestHandler;
-import ru.rt.handlers.GetUserDataResponseHandler;
-import ru.rt.services.FrontendServiceImpl;
+import ru.rt.handlers.ClientRequestHandler;
+import ru.rt.handlers.ClientResponseHandler;
+import ru.rt.services.DatabaseService;
+import ru.rt.services.FrontendService;
 
 @Configuration
 public class MSConfig {
@@ -22,22 +23,34 @@ public class MSConfig {
     private static final String DATABASE_SERVICE_CLIENT_NAME = "databaseService";
 
     @Bean
-    public FrontendServiceImpl getFrontendService(ClientRepository clientRepository){
-        MessageSystem messageSystem = new MessageSystemImpl();
-        CallbackRegistry callbackRegistry = new CallbackRegistryImpl();
+    public MessageSystem getMessageSystem(){
+        return new MessageSystemImpl();
+    }
 
+    @Bean
+    public CallbackRegistry callbackRegistry(){
+        return new CallbackRegistryImpl();
+    }
+
+    @Bean
+    public DatabaseService getDatabaseService(CallbackRegistry callbackRegistry, MessageSystem messageSystem, ClientRepository clientRepository){
         HandlersStore requestHandlerDatabaseStore = new HandlersStoreImpl();
-        requestHandlerDatabaseStore.addHandler(MessageType.USER_DATA, new GetUserDataRequestHandler(clientRepository));
+        requestHandlerDatabaseStore.addHandler(MessageType.USER_DATA, new ClientRequestHandler(clientRepository));
         MsClient databaseMsClient = new MsClientImpl(DATABASE_SERVICE_CLIENT_NAME,
                 messageSystem, requestHandlerDatabaseStore, callbackRegistry);
         messageSystem.addClient(databaseMsClient);
 
+        return new DatabaseService(databaseMsClient, FRONTEND_SERVICE_CLIENT_NAME);
+    }
+
+    @Bean
+    public FrontendService getFrontendService(CallbackRegistry callbackRegistry, MessageSystem messageSystem){
         HandlersStore requestHandlerFrontendStore = new HandlersStoreImpl();
-        requestHandlerFrontendStore.addHandler(MessageType.USER_DATA, new GetUserDataResponseHandler(callbackRegistry));
+        requestHandlerFrontendStore.addHandler(MessageType.USER_DATA, new ClientResponseHandler(callbackRegistry));
         MsClient frontendMsClient = new MsClientImpl(FRONTEND_SERVICE_CLIENT_NAME,
                 messageSystem, requestHandlerFrontendStore, callbackRegistry);
         messageSystem.addClient(frontendMsClient);
 
-        return new FrontendServiceImpl(frontendMsClient, DATABASE_SERVICE_CLIENT_NAME);
+        return new FrontendService(frontendMsClient, DATABASE_SERVICE_CLIENT_NAME);
     }
 }

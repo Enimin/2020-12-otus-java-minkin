@@ -1,34 +1,24 @@
 package ru.rt.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ClientDTO {
-//    private Long id;
+public class ClientDTO implements Serializable {
+    private Long id;
 
     private String name;
 
     private String address;
 
-    private String phones;
+    private List<String> phones;
 
-    public ClientDTO() {
+    public Long getId() {
+        return id;
     }
 
-    public ClientDTO(String name, String address, String phones) {
-//    public ClientDTO(Long id, String name, String address, String phones) {
-//        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.phones = phones;
+    public void setId(Long id) {
+        this.id = id;
     }
-
-//    public Long getId() {
-//        return id;
-//    }
-
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
 
     public String getName() {
         return name;
@@ -46,11 +36,11 @@ public class ClientDTO {
         this.address = address;
     }
 
-    public String getPhones() {
+    public List<String> getPhones() {
         return phones;
     }
 
-    public void setPhones(String phones) {
+    public void setPhones(List<String> phones) {
         this.phones = phones;
     }
 }

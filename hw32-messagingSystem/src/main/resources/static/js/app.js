@@ -16,7 +16,6 @@ const connect = () => {
     stompClient.connect({}, (frame) => {
         setConnected(true);
         getAllClients();
-        console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/response', (message) => showMessage(JSON.parse(message.body)));
     });
 }
@@ -34,10 +33,10 @@ const getAllClients = () => stompClient.send("/app/clients", {})
 function formStringify(){
     const client = {};
     client["name"] = $("input[name=name]").val();
-    client["address"] = {"street": $("input[name=address]").val()};
+    client["address"] = $("input[name=address]").val();
     client["phones"] = $("input[name=phones]")
                         .map(function(){
-                                return {"number": $(this).val()}
+                                return $(this).val()
                              })
                         .get();
     return JSON.stringify(client);
@@ -72,10 +71,10 @@ function showMessage (message) {
     for (let i = 0; i < message.length; i++){
         let row = newRow(table);
         row.cells[0].innerText = message[i].name;
-        row.cells[1].innerText = message[i].address.street;
+        row.cells[1].innerText = message[i].address;
         row.cells[2].innerHTML = "";
         for (let j = 0; j < message[i].phones.length; j++){
-            row.cells[2].innerHTML += message[i].phones[j].number + "<br>";
+            row.cells[2].innerHTML += message[i].phones[j] + "<br>";
         }
         table.append(row);
     }
