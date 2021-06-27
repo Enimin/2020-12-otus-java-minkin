@@ -9,11 +9,7 @@ import ru.rt.killBoss.generated.RemoteServiceGrpc;
 import ru.rt.killBoss.generated.RangeMessage;
 import ru.rt.killBoss.generated.ResponseMessage;
 
-import java.util.TreeMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class GRPCClient {
     private static final Logger logger = LoggerFactory.getLogger(GRPCClient.class);
@@ -26,7 +22,7 @@ public class GRPCClient {
     private static final int TIMER_SECONDS = 1;
 
     private static final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    private static final TreeMap<Integer, Boolean> serverNumbers = new TreeMap<>();
+    private static final ConcurrentSkipListMap<Integer, Boolean> serverNumbers = new ConcurrentSkipListMap<>();
     private static int currentValue = 0;
     private static int index = 0;
 
