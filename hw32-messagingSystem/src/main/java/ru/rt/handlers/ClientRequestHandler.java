@@ -6,6 +6,7 @@ import ru.otus.messagesystem.message.MessageBuilder;
 import ru.otus.messagesystem.RequestHandler;
 import ru.rt.crm.model.Client;
 import ru.rt.crm.repository.ClientRepository;
+import ru.rt.messages.Actions;
 import ru.rt.messages.DataMessage;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 
 public class ClientRequestHandler implements RequestHandler<DataMessage> {
+
     private final ClientRepository clientRepository;
 
     public ClientRequestHandler(ClientRepository clientRepository) {
@@ -22,7 +24,7 @@ public class ClientRequestHandler implements RequestHandler<DataMessage> {
     @Override
     public Optional<Message> handle(Message msg) {
         DataMessage dataMessage = MessageHelper.getPayload(msg);
-        if (dataMessage.getAction().equals("SAVE")){
+        if (dataMessage.getAction().equals(Actions.SAVE)){
             var client = dataMessage.getClient();
             clientRepository.save(client);
         }

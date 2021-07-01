@@ -11,15 +11,15 @@ import java.util.stream.Collectors;
 
 public class DataMessage extends ResultDataType {
 
-    private final String action;
+    private final Actions action;
     private List<ClientDTO> clients;
 
-    public DataMessage(String action, List<ClientDTO> clients) {
+    public DataMessage(Actions action, List<ClientDTO> clients) {
         this.action = action;
         this.clients = clients;
     }
 
-    public String getAction() {
+    public Actions getAction() {
         return action;
     }
 
